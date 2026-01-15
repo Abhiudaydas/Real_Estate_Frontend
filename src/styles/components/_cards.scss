@@ -1,0 +1,35 @@
+.property-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.property-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #ffffff;
+
+  &__image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+  }
+
+  &__body {
+    padding: 1rem;
+  }
+
+  &__price {
+    font-weight: 700;
+    margin-top: 0.5rem;
+  }
+
+  &__link {
+    display: inline-block;
+    margin-top: 0.75rem;
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 600;
+  }
+}

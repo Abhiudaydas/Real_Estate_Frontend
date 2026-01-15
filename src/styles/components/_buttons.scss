@@ -1,0 +1,24 @@
+.btn {
+  padding: 0.4rem 0.9rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+
+  &--primary {
+    background: #2563eb;
+    color: #ffffff;
+  }
+
+  &--outline {
+    border: 1px solid #2563eb;
+    color: #2563eb;
+  }
+
+  &--danger {
+    color: #dc2626;
+    background: none;
+    border: none;
+  }
+}

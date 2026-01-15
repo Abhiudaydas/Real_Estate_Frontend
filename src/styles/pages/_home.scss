@@ -1,0 +1,28 @@
+.hero {
+  background: #2563eb;
+  color: #ffffff;
+  padding: 4rem 0;
+
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  p {
+    margin: 1rem 0;
+  }
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 3rem auto;
+
+  .feature {
+    padding: 1.5rem;
+    background: #f1f5f9;
+    text-align: center;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+}
