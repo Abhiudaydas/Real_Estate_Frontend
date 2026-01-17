@@ -1,44 +1,24 @@
-.header {
-  background: #ffffff;
-  border-bottom: 1px solid #e5e7eb;
-  position: relative;
+.navbar {
+  background-color: $white;
+  box-shadow: $shadow-sm;
+  padding: $spacing-md 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 
-  &__inner {
+  .navbar-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 64px;
   }
 
-  &__logo {
-    font-size: 1.25rem;
+  .navbar-brand {
+    font-size: 1.5rem;
     font-weight: 700;
-    color: #2563eb;
-    text-decoration: none;
+    color: $primary-color;
   }
 
-  &__nav {
-    display: flex;
-    align-items: center;
-    gap: 1.2rem;
-
-    a {
-      text-decoration: none;
-      color: #111827;
-      font-weight: 500;
-    }
-
-    @media (max-width: 768px) {
-      display: none;
-    }
-  }
-
-  &__auth {
-    display: flex;
-    gap: 0.75rem;
-  }
-
-  &__hamburger {
+  .mobile-menu-toggle {
     display: none;
     font-size: 1.5rem;
     background: none;
@@ -49,28 +29,40 @@
       display: block;
     }
   }
-}
 
-/* Mobile Menu */
-.mobile-menu {
-  position: absolute;
-  top: 64px;
-  left: 0;
-  width: 100%;
-  background: #ffffff;
-  border-top: 1px solid #e5e7eb;
-  display: flex;
-  flex-direction: column;
+  .navbar-menu {
+    display: flex;
+    align-items: center;
+    gap: $spacing-lg;
 
-  a,
-  button {
-    padding: 1rem;
-    text-align: left;
-    border-bottom: 1px solid #f1f5f9;
-    background: none;
-    border: none;
-    text-decoration: none;
-    color: #111827;
-    font-weight: 500;
+    @media (max-width: 768px) {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: $white;
+      flex-direction: column;
+      padding: $spacing-lg;
+      box-shadow: $shadow;
+
+      &.active {
+        display: flex;
+      }
+    }
+
+    .nav-link {
+      color: $text-color;
+      font-weight: 500;
+
+      &:hover {
+        color: $primary-color;
+      }
+    }
+
+    .nav-user {
+      color: $text-muted;
+      font-size: $font-size-sm;
+    }
   }
 }

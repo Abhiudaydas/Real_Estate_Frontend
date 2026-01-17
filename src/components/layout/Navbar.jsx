@@ -1,91 +1,90 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
+import { logoutUser } from "../../api/auth.api";
 
 const Navbar = () => {
-  const { user, loading, logout } = useAuthContext();
-  const [open, setOpen] = useState(false);
+  const { user, setUser } = useAuthContext();
   const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = async () => {
-    await logout();
-    navigate("/login");
+    try {
+      await logoutUser();
+      setUser(null);
+      navigate("/");
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   };
 
-  if (loading) return null;
-
   return (
-    <header className="header">
-      <div className="container header__inner">
-        {/* Logo */}
-        <Link to="/" className="header__logo">
-          PlotNest
-        </Link>
+    <nav className="navbar">
+      <div className="container">
+        <div className="navbar-content">
+          <Link to="/" className="navbar-brand">
+            PlotNest
+          </Link>
 
-        {/* Desktop Menu */}
-        <nav className="header__nav">
-          <Link to="/">Home</Link>
-          <Link to="/properties">Properties</Link>
-          <Link to="/sell">Sell</Link>
-          <Link to="/rent">Rent</Link>
-          <Link to="/about">About</Link>
+          <button
+            className="mobile-menu-toggle"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            ☰
+          </button>
 
-          {!user ? (
-            <div className="header__auth">
-              <Link to="/login" className="btn btn--outline">
+          <div className={`navbar-menu ${mobileMenuOpen ? "active" : ""}`}>
+            <Link to="/" className="nav-link">
+              Home
+            </Link>
+            <Link to="/properties" className="nav-link">
+              Properties
+            </Link>
+
+            {user ? (
+              <>
+                {user.role === "ADMIN" ? (
+                  <>
+                    <Link to="/admin" className="nav-link">
+                      Dashboard
+                    </Link>
+                    <Link to="/admin/properties" className="nav-link">
+                      Manage Properties
+                    </Link>
+                    <Link to="/admin/users" className="nav-link">
+                      Users
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link to="/user" className="nav-link">
+                      Dashboard
+                    </Link>
+                    <Link to="/user/my-properties" className="nav-link">
+                      My Properties
+                    </Link>
+                    <Link to="/user/add-property" className="nav-link">
+                      Add Property
+                    </Link>
+                  </>
+                )}
+                <span className="nav-user">Welcome, {user.name}</span>
+                <button
+                  onClick={handleLogout}
+                  className="btn btn-secondary btn-small"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <Link to="/login" className="btn btn-primary btn-small">
                 Login
               </Link>
-              <Link to="/signup" className="btn btn--primary">
-                Sign Up
-              </Link>
-            </div>
-          ) : (
-            <button onClick={handleLogout} className="btn btn--danger">
-              Logout
-            </button>
-          )}
-        </nav>
-
-        {/* Hamburger */}
-        <button className="header__hamburger" onClick={() => setOpen(!open)}>
-          ☰
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
-      {open && (
-        <div className="mobile-menu">
-          <Link to="/" onClick={() => setOpen(false)}>
-            Home
-          </Link>
-          <Link to="/properties" onClick={() => setOpen(false)}>
-            Properties
-          </Link>
-          <Link to="/sell" onClick={() => setOpen(false)}>
-            Sell
-          </Link>
-          <Link to="/rent" onClick={() => setOpen(false)}>
-            Rent
-          </Link>
-          <Link to="/about" onClick={() => setOpen(false)}>
-            About
-          </Link>
-
-          {!user ? (
-            <>
-              <Link to="/login" onClick={() => setOpen(false)}>
-                Login
-              </Link>
-              <Link to="/signup" onClick={() => setOpen(false)}>
-                Sign Up
-              </Link>
-            </>
-          ) : (
-            <button onClick={handleLogout}>Logout</button>
-          )}
+            )}
+          </div>
         </div>
-      )}
-    </header>
+      </div>
+    </nav>
   );
 };
 

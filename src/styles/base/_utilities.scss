@@ -1,0 +1,78 @@
+.error-message {
+  background-color: lighten($danger-color, 35%);
+  color: $danger-color;
+  padding: $spacing-md;
+  border-radius: $border-radius;
+  margin: $spacing-md 0;
+  border-left: 4px solid $danger-color;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  border-radius: $border-radius;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-approved,
+.status-active {
+  background-color: lighten($success-color, 45%);
+  color: darken($success-color, 10%);
+}
+
+.status-rejected,
+.status-inactive {
+  background-color: lighten($danger-color, 35%);
+  color: darken($danger-color, 10%);
+}
+
+.status-pending {
+  background-color: lighten($warning-color, 35%);
+  color: darken($warning-color, 20%);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: $spacing-lg;
+  margin-bottom: $spacing-xl;
+}
+
+.stat-card {
+  background: $white;
+  padding: $spacing-xl;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow;
+  text-align: center;
+  transition: $transition-base;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: $shadow-lg;
+  }
+
+  .stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: $primary-color;
+    margin-bottom: $spacing-sm;
+  }
+
+  .stat-label {
+    color: $text-muted;
+  }
+
+  &.stat-success .stat-value {
+    color: $success-color;
+  }
+
+  &.stat-warning .stat-value {
+    color: $warning-color;
+  }
+
+  &.stat-danger .stat-value {
+    color: $danger-color;
+  }
+}

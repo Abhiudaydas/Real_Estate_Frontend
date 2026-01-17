@@ -1,0 +1,45 @@
+.input-group {
+  margin-bottom: $spacing-md;
+}
+
+.input-label {
+  display: block;
+  margin-bottom: $spacing-sm;
+  font-weight: 500;
+
+  .required {
+    color: $danger-color;
+    margin-left: 0.25rem;
+  }
+}
+
+.input,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+textarea,
+select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid $border-color;
+  border-radius: $border-radius;
+  font-size: $font-size-base;
+  transition: $transition-base;
+
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+  }
+
+  &.error {
+    border-color: $danger-color;
+  }
+}
+
+.input-error {
+  display: block;
+  margin-top: $spacing-sm;
+  color: $danger-color;
+  font-size: $font-size-sm;
+}
