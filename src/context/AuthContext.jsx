@@ -10,9 +10,15 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const loadUser = async () => {
       try {
+        console.log("[AuthContext] Loading user...");
         const res = await getMe();
+        console.log("[AuthContext] User loaded:", res.data);
         setUser(res.data);
-      } catch {
+      } catch (error) {
+        console.log(
+          "[AuthContext] No user session or error:",
+          error.response?.status,
+        );
         setUser(null);
       } finally {
         setLoading(false);

@@ -6,6 +6,7 @@ import Home from "../pages/public/Home";
 import Properties from "../pages/public/Properties";
 import PropertyDetails from "../pages/public/PropertyDetails";
 import Login from "../pages/auth/Login";
+import Register from "../pages/auth/Register";
 
 // User Pages
 import Dashboard from "../pages/user/Dashboard";
@@ -37,6 +38,7 @@ const AppRoutes = () => {
         <Route path="/properties" element={<Properties />} />
         <Route path="/properties/:id" element={<PropertyDetails />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
         {/* USER ROUTES */}
         <Route

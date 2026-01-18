@@ -13,14 +13,11 @@ const AddProperty = () => {
     title: "",
     description: "",
     price: "",
-    propertyType: "RESIDENTIAL",
-    area: "",
-    bedrooms: "",
-    bathrooms: "",
+    type: "sell",
+    category: "house",
     address: "",
     city: "",
     state: "",
-    zipCode: "",
     latitude: "",
     longitude: "",
   });
@@ -34,7 +31,12 @@ const AddProperty = () => {
   };
 
   const handleImageChange = (e) => {
-    setImages(Array.from(e.target.files));
+    const files = Array.from(e.target.files);
+    if (files.length > 5) {
+      setError("Maximum 5 images allowed");
+      return;
+    }
+    setImages(files);
   };
 
   const handleLocationSelect = (location) => {
@@ -53,15 +55,26 @@ const AddProperty = () => {
     try {
       const data = new FormData();
 
-      // Append all form fields
-      Object.keys(formData).forEach((key) => {
-        data.append(key, formData[key]);
-      });
+      // Append basic fields
+      data.append("title", formData.title);
+      data.append("description", formData.description);
+      data.append("price", formData.price);
+      data.append("type", formData.type);
+      data.append("category", formData.category);
+      data.append("latitude", formData.latitude);
+      data.append("longitude", formData.longitude);
+
+      // Append location fields
+      data.append("location[address]", formData.address);
+      data.append("location[city]", formData.city);
+      data.append("location[state]", formData.state);
 
       // Append images
       images.forEach((image) => {
         data.append("images", image);
       });
+
+      console.log("Submitting property:", Object.fromEntries(data));
 
       await createProperty(data);
       alert("Property added successfully! Waiting for admin approval.");
@@ -120,46 +133,30 @@ const AddProperty = () => {
               <div className="form-group">
                 <label>Property Type</label>
                 <select
-                  name="propertyType"
-                  value={formData.propertyType}
+                  name="type"
+                  value={formData.type}
                   onChange={handleChange}
                   required
                 >
-                  <option value="RESIDENTIAL">Residential</option>
-                  <option value="COMMERCIAL">Commercial</option>
-                  <option value="LAND">Land</option>
+                  <option value="sell">For Sale</option>
+                  <option value="rent">For Rent</option>
                 </select>
               </div>
-            </div>
 
-            <div className="form-row">
-              <Input
-                label="Area (sq.ft)"
-                name="area"
-                type="number"
-                value={formData.area}
-                onChange={handleChange}
-                placeholder="1500"
-                required
-              />
-
-              <Input
-                label="Bedrooms"
-                name="bedrooms"
-                type="number"
-                value={formData.bedrooms}
-                onChange={handleChange}
-                placeholder="3"
-              />
-
-              <Input
-                label="Bathrooms"
-                name="bathrooms"
-                type="number"
-                value={formData.bathrooms}
-                onChange={handleChange}
-                placeholder="2"
-              />
+              <div className="form-group">
+                <label>Category</label>
+                <select
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="house">House</option>
+                  <option value="flat">Flat</option>
+                  <option value="land">Land</option>
+                  <option value="commercial">Commercial</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -193,20 +190,17 @@ const AddProperty = () => {
                 placeholder="State"
                 required
               />
-
-              <Input
-                label="ZIP Code"
-                name="zipCode"
-                value={formData.zipCode}
-                onChange={handleChange}
-                placeholder="123456"
-                required
-              />
             </div>
 
             <div className="map-picker-container">
               <label>Select Location on Map</label>
               <MapPicker onLocationSelect={handleLocationSelect} />
+              {formData.latitude && formData.longitude && (
+                <p className="location-info">
+                  Selected: {formData.latitude.toFixed(6)},{" "}
+                  {formData.longitude.toFixed(6)}
+                </p>
+              )}
             </div>
           </div>
 

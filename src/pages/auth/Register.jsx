@@ -1,17 +1,16 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { loginUser, getMe } from "../../api/auth.api";
-import { useAuthContext } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { registerUser } from "../../api/auth.api";
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
 
-const Login = () => {
+const Register = () => {
   const navigate = useNavigate();
-  const { setUser } = useAuthContext();
-
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -26,41 +25,32 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+
+    // Validation
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters long");
+      return;
+    }
+
     setLoading(true);
 
-    console.log("Attempting login with:", { email: formData.email });
-
     try {
-      // Step 1: Login
-      const loginResponse = await loginUser(formData);
-      console.log("Login response:", loginResponse);
+      await registerUser({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      });
 
-      // Step 2: Get user data
-      const userResponse = await getMe();
-      console.log("User data response:", userResponse);
-
-      const userData = userResponse.data;
-      setUser(userData);
-
-      // Step 3: Navigate based on role
-      if (userData.role === "ADMIN") {
-        navigate("/admin");
-      } else {
-        navigate("/user");
-      }
+      alert("Registration successful! Please login.");
+      navigate("/login");
     } catch (err) {
-      console.error("Full login error:", err);
-      console.error("Error response:", err.response);
-
-      if (err.response) {
-        setError(err.response.data?.message || "Login failed");
-      } else if (err.request) {
-        setError(
-          "No response from server. Please check if backend is running.",
-        );
-      } else {
-        setError("An error occurred. Please try again.");
-      }
+      console.error("Registration error:", err);
+      setError(err.response?.data?.message || "Registration failed");
     } finally {
       setLoading(false);
     }
@@ -71,10 +61,20 @@ const Login = () => {
       <div className="container">
         <div className="login-container">
           <div className="login-card">
-            <h1>Welcome Back</h1>
-            <p className="subtitle">Login to your PlotNest account</p>
+            <h1>Create Account</h1>
+            <p className="subtitle">Join PlotNest today</p>
 
             <form onSubmit={handleSubmit}>
+              <Input
+                label="Full Name"
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Enter your full name"
+                required
+              />
+
               <Input
                 label="Email"
                 type="email"
@@ -95,6 +95,16 @@ const Login = () => {
                 required
               />
 
+              <Input
+                label="Confirm Password"
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="Confirm your password"
+                required
+              />
+
               {error && <div className="error-message">{error}</div>}
 
               <Button
@@ -103,12 +113,12 @@ const Login = () => {
                 loading={loading}
                 className="btn-block"
               >
-                Login
+                Register
               </Button>
             </form>
 
             <p className="login-footer">
-              Don't have an account? <Link to="/register">Register here</Link>
+              Already have an account? <a href="/login">Login here</a>
             </p>
           </div>
         </div>
@@ -117,4 +127,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
